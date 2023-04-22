@@ -7,24 +7,35 @@ const Bill = () => {
   const [peopleNumber, setPeopleNumber] = React.useState(0);
   const [customPercentage, setCustomPercentage] = React.useState(0);
 
-  function handleInputChange({target}) {
-    setInputValue(target.value)
+  function handleInputChange(event) {
+  const value = event.target.value.slice(0, 8);
+  if (/^\d*\.?\d*$/.test(value)) {
+    setInputValue(value);
   }
+}
 
-  function handleInputPeople({target}) {
-    setPeopleNumber(target.value);
+function handleInputPeople({ target }) {
+  const value = target.value.slice(0, 8);
+  if (/^\d*\.?\d*$/.test(value)) {
+    if (value !== '0') {
+      setPeopleNumber(value);
+    }
   }
+}
 
-  const handleCustomPercentage = (e) => {
-    setCustomPercentage(e.target.value);
-  };
+  function handleCustomPercentage(event) {
+  const value = event.target.value.slice(0, 2);
+  if (/^\d*\.?\d*$/.test(value)) {
+    setCustomPercentage(value);
+  }
+}
 
-  const handlePercentage = (e) => {
-    if (e.target.value === "custom") {
+  const handlePercentage = (event) => {
+    if (event.target.value === "custom") {
       setPercentage(customPercentage);
     } else {
       setCustomPercentage(0);
-      setPercentage(e.target.value);
+      setPercentage(event.target.value);
     }
   };
 
@@ -32,6 +43,7 @@ const Bill = () => {
     setPercentage(0);
     setPeopleNumber(0);
     setInputValue(0);
+    setCustomPercentage(0);
   }
   
 
@@ -39,7 +51,7 @@ const Bill = () => {
   <div className='bg-white md:h-[500px] h-screen md:max-w-[800px] md:grid md:gap-8 md:grid-cols-2 w-screen md:rounded-3xl rounded-t-3xl p-6'>
     <div className='flex flex-col gap-2 relative justify-center'>
         <span className='text-[#5e7a7d] text-sm block mt-6'>Bill</span>
-        <input onChange={handleInputChange} className='text-[#00494d] text-2xl border outline-[#26c0ab] text-right  h-8' type="number" placeholder='0' />
+        <input onChange={handleInputChange} className='text-[#00494d] text-2xl border outline-[#26c0ab] text-right  h-8' type="number" placeholder='0' value={inputValue} />
         <img className='h-3 w-3 absolute left-8 md:left-4 top-14 md:top-20 mt-2' src={dolars} alt="" />
         <span className='text-[#5e7a7d] text-sm block mt-6'>Select Tip %</span>
         <div>
@@ -54,7 +66,7 @@ const Bill = () => {
         </div>
       <div className='flex flex-col'>
         <span className='text-[#5e7a7d] text-sm block mt-6'>Number of people</span>
-        <input onChange={handleInputPeople} className='text-[#00494d] outline-[#26c0ab] text-right text-2xl mb-8' type="number" placeholder='0' />
+        <input onChange={handleInputPeople} className='text-[#00494d] outline-[#26c0ab] text-right text-2xl mb-8' type="number" placeholder='0' value={peopleNumber} />
       </div>
     </div>
     <div className='p-4 grid grid-cols-2 rounder-xl bg-[#00494d] h-[250px] md:h-full rounded-lg w-full'>
@@ -63,7 +75,7 @@ const Bill = () => {
         <span className='text-[#5e7a7d] text-[0.65rem] block ml-6'>/ person</span>
       </div>
       <div className='flex justify-end mr-8 mt-4'>
-      <span className='text-3xl text-[#26c0ab] block'>
+      <span className='text-2xl text-[#26c0ab] block'>
   {'$' + ((((inputValue * (customPercentage || percentage)) / 100) / (peopleNumber || 1)).toFixed(2))}
 </span>
 
@@ -73,7 +85,7 @@ const Bill = () => {
         <span className='text-[#5e7a7d] text-[0.65rem] block ml-6'>/ person</span>
       </div>
       <div className='flex justify-end mr-8 mt-4'>
-      <span className='text-3xl text-[#26c0ab] block'>
+      <span className='text-2xl text-[#26c0ab] block'>
   {'$' + ((((inputValue * (customPercentage || percentage)) / 100) + Number(inputValue)) / (peopleNumber || 1)).toFixed(2)}
 </span>
 
